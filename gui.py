@@ -8,6 +8,10 @@ import re
 # get names and titles of voices from main.py
 with open("main.py", "r") as mainfile:
     lines = mainfile.readlines()
+
+if not os.path.isdir('output'):
+    os.mkdir('output')
+
 print(lines[62])
 voices_dict = {}
 voice_title_list = []
@@ -59,7 +63,7 @@ l = Label(w, text="Write text below")
 l.pack()
 
 # Create text widget and specify size.
-text_field = Text(w, height=3, width=20)
+text_field = Text(w, height=4, width=30)
 text_field.config(font=("Calibri", 14))
 text_field.pack()
 default_text = "I'm walking here"
