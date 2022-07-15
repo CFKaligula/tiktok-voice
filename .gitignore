@@ -2,3 +2,5 @@ voice.mp3
 text.txt
 batch
 .venv
+output/
+*.pyc

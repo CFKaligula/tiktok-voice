@@ -1,4 +1,10 @@
-import requests, base64, random, argparse, os, playsound, time
+import requests
+import base64
+import random
+import argparse
+import os
+import playsound
+import time
 
 # https://twitter.com/scanlime/status/1512598559769702406
 
@@ -46,13 +52,13 @@ voices = [
     'kr_002',                     # Korean - Male 1
     'kr_003',                     # Korean - Female
     'kr_004',                     # Korean - Male 2
-    
+
     # NARRATOR
-    'en_male_narration'
-    
+    'en_male_narration',
+
     # SINGING VOICES
-    'en_female_f08_salut_damour'  # Alto
-    'en_male_m03_lobby'           # Tenor
+    'en_female_f08_salut_damour',  # Alto
+    'en_male_m03_lobby'            # Tenor
 ]
 
 
@@ -81,6 +87,7 @@ def tts(text_speaker: str = "en_us_002", req_text: str = "TikTok Text To Speech"
         playsound.playsound(filename)
         os.remove(filename)
 
+
 def tts_batch(text_speaker: str = 'en_us_002', req_text: str = 'TikTok Text to Speech', filename: str = 'voice.mp3'):
     req_text = req_text.replace("+", "plus")
     req_text = req_text.replace(" ", "+")
@@ -101,22 +108,24 @@ def tts_batch(text_speaker: str = 'en_us_002', req_text: str = 'TikTok Text to S
 
     print(f"\n{msg.capitalize()}")
 
+
 def batch_create(filename: str = 'voice.mp3'):
     out = open(filename, 'wb')
-    
+
     for item in os.listdir('./batch/'):
         filestuff = open('./batch/' + item, 'rb').read()
         out.write(filestuff)
 
     out.close()
 
+
 def main():
-    parser = argparse.ArgumentParser(description = "Simple Python script to interact with the TikTok TTS API")
-    parser.add_argument("-v", "--voice", help = "the code of the desired voice")
-    parser.add_argument("-t", "--text", help = "the text to be read")
-    parser.add_argument("-f", "--file", help = "use this if you wanna use 'text.txt'")
-    parser.add_argument("-n", "--name", help = "The name for the output file (.mp3)")
-    parser.add_argument("-p", "--play", action='store_true', help = "use this if you want to play your output")
+    parser = argparse.ArgumentParser(description="Simple Python script to interact with the TikTok TTS API")
+    parser.add_argument("-v", "--voice", help="the code of the desired voice")
+    parser.add_argument("-t", "--text", help="the text to be read")
+    parser.add_argument("-f", "--file", help="use this if you wanna use 'text.txt'")
+    parser.add_argument("-n", "--name", help="The name for the output file (.mp3)")
+    parser.add_argument("-p", "--play", action='store_true', help="use this if you want to play your output")
     args = parser.parse_args()
 
     text_speaker = args.voice
@@ -147,20 +156,20 @@ def main():
 
     if args.file is not None:
         chunks, chunk_size = len(req_text), 200
-        textlist = [ req_text[i:i+chunk_size] for i in range(0, chunks, chunk_size)]
+        textlist = [req_text[i:i+chunk_size] for i in range(0, chunks, chunk_size)]
 
-        amount = len(textlist) 
+        amount = len(textlist)
 
         os.makedirs('./batch/')
 
         for i, item in enumerate(textlist):
             tts_batch(text_speaker, item, f'./batch/{i}.mp3')
-        
+
         batch_create(filename)
 
         for item in os.listdir('./batch/'):
             os.remove('./batch/' + item)
-        
+
         os.removedirs('./batch/')
 
         return
@@ -174,6 +183,7 @@ def randomvoice():
 
     return text_speaker
 
+
 def sampler():
     for item in voices:
         text_speaker = item
@@ -181,6 +191,7 @@ def sampler():
         print(item)
         req_text = 'TikTok Text To Speech Sample'
         tts(text_speaker, req_text, filename)
+
 
 if __name__ == "__main__":
     main()
